@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class StartScreen extends StatelessWidget {
+  const StartScreen(this.startQuiz, {super.key});
+
+  final void Function() startQuiz;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    onPressed() {
-      print('click!');
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -32,7 +30,7 @@ class Home extends StatelessWidget {
           height: 30,
         ),
         OutlinedButton.icon(
-          onPressed: onPressed,
+          onPressed: startQuiz,
           style: OutlinedButton.styleFrom(foregroundColor: Colors.white),
           icon: const Icon(Icons.arrow_right_alt),
           label: const Text('Start Quiz'),
