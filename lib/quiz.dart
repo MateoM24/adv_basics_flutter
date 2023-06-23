@@ -1,4 +1,6 @@
+import 'package:adv_basics/models/questions.dart';
 import 'package:adv_basics/questions_screen.dart';
+import 'package:adv_basics/results_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'start_screen.dart';
@@ -19,6 +21,7 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   Widget? activeScreen;
+  List<String> selectedAnswers = [];
 
   @override
   void initState() {
@@ -26,10 +29,29 @@ class _QuizState extends State<Quiz> {
     super.initState();
   }
 
+  void chooseAnswer(String answer) {
+    selectedAnswers.add(answer);
+
+    if (hasAllQuestionsBeenAnswered()) {
+      setState(() {
+        activeScreen = ResultsScreen(
+          chosenAnswers: selectedAnswers,
+        );
+        selectedAnswers = [];
+      });
+    }
+  }
+
+  bool hasAllQuestionsBeenAnswered() {
+    return selectedAnswers.length == questions.length;
+  }
+
   switchScreen() {
     //when setState is called build method is rerendered if anything has changed in widgets tree
     setState(() {
-      activeScreen = const QuestionsScreen();
+      activeScreen = QuestionsScreen(
+        onSelectedAnswer: chooseAnswer,
+      );
     });
   }
 
@@ -39,10 +61,11 @@ class _QuizState extends State<Quiz> {
       home: Scaffold(
         body: Container(
           decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  colors: colors,
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight)),
+            gradient: LinearGradient(
+                colors: colors,
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight),
+          ),
           child: Center(
             child: activeScreen,
           ),

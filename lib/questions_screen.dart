@@ -1,12 +1,16 @@
 import 'package:adv_basics/models/questions.dart';
-import 'package:adv_basics/models/quiz_question.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'answer_button.dart';
 
 class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen({super.key});
+  const QuestionsScreen({
+    super.key,
+    required this.onSelectedAnswer,
+  });
+
+  final void Function(String answer) onSelectedAnswer;
 
   @override
   State<QuestionsScreen> createState() {
@@ -17,7 +21,9 @@ class QuestionsScreen extends StatefulWidget {
 class _QuestionsScreenState extends State<QuestionsScreen> {
   int currentQuestionIndex = 0;
 
-  void answerQuestion() {
+  void answerQuestion(String answer) {
+    //this widger object is something flutter gives you by default. A way to access properties of widget class in state class.
+    widget.onSelectedAnswer(answer);
     setState(() {
       currentQuestionIndex++;
     });
@@ -44,9 +50,13 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           const SizedBox(
             height: 30,
           ),
-          ...questions[currentQuestionIndex].getShuffledAnswers().map(
-              (answer) =>
-                  AnswerButton(answerText: answer, onTap: answerQuestion)),
+          ...questions[currentQuestionIndex]
+              .getShuffledAnswers()
+              .map((answer) => AnswerButton(
+                  answerText: answer,
+                  onTap: () {
+                    answerQuestion(answer);
+                  })),
         ],
       ),
     );
